@@ -1,5 +1,5 @@
 <template>
-  <div class="admin-page">
+  <div v-if="isAuthenticated" class="admin-page">
     <aside class="sidebar">
       <nav>
         <ul>
@@ -24,6 +24,7 @@
           <h3>Ajouter un utilisateur</h3>
           <input v-model="newUser.username" type="text" placeholder="Nom d'utilisateur" required />
           <input v-model="newUser.email" type="email" placeholder="Email" required />
+          <input v-model="newUser.password" type="password" placeholder="Mot de passe" required />
           <button type="submit">Ajouter</button>
         </form>
       </div>
@@ -55,16 +56,40 @@
 import { ref, onMounted } from "vue";
 import api from "../api/axios";
 
+const isAuthenticated = ref(false);
 const currentSection = ref("users");
 const users = ref([]);
 const articles = ref([]);
-const newUser = ref({ username: "", email: "" });
+const newUser = ref({ username: "", email: "", password: "" });
 const newArticle = ref({ title: "", description: "", body: "", tags: "" });
+
+const AUTH_PASSWORD = "admin123";
+
+const checkAccess = () => {
+  const enteredPassword = prompt("Entrez le mot de passe pour accéder à l'administration :");
+  if (enteredPassword === AUTH_PASSWORD) {
+    isAuthenticated.value = true;
+  } else {
+    alert("Mot de passe incorrect !");
+    isAuthenticated.value = false;
+    window.location.href = '/';
+
+  }
+};
 
 const loadUsers = async () => {
   try {
-    const response = await api.get("/api/users");
-    users.value = response.data.users;
+    let allUsers = [];
+    let page = 1;
+
+    while (true) {
+      const response = await api.get(`/api/users?page=${page}`);
+      if (response.data.users.length === 0) break;
+      allUsers = [...allUsers, ...response.data.users];
+      page++;
+    }
+
+    users.value = allUsers;
   } catch (error) {
     console.error("Erreur lors du chargement des utilisateurs :", error);
   }
@@ -74,7 +99,7 @@ const addUser = async () => {
   try {
     const response = await api.post("/api/users", { user: newUser.value });
     users.value.push(response.data.user);
-    newUser.value = { username: "", email: "" };
+    newUser.value = { username: "", email: "", password: "" };
   } catch (error) {
     console.error("Erreur lors de l'ajout de l'utilisateur :", error);
   }
@@ -130,8 +155,11 @@ const showSection = (section) => {
 };
 
 onMounted(() => {
-  loadUsers();
-  loadArticles();
+  checkAccess();
+  if (isAuthenticated.value) {
+    loadUsers();
+    loadArticles();
+  }
 });
 </script>
 
@@ -194,6 +222,8 @@ onMounted(() => {
   justify-content: space-between;
   margin-bottom: 10px;
   align-items: center;
+  color: black;
+  margin-right: 50px;
 }
 
 button {

@@ -35,7 +35,6 @@ const user = ref({
   avatar: localStorage.getItem("currentUser") ? JSON.parse(localStorage.getItem("currentUser")).image : null,
 });
 
-
 const isLoggedIn = computed(() => !!localStorage.getItem("token"));
 const userName = computed(() => user.value?.name || "Utilisateur");
 const userAvatar = computed(() => user.value?.avatar || "@/assets/logo.png");
@@ -53,6 +52,15 @@ const logout = () => {
   alert("Vous êtes déconnecté.");
   window.location.reload();
 };
+
+onMounted(() => {
+  document.title = "Cuisto'Dingo !"; // Titre de l'onglet
+  const favicon = document.createElement("link");
+  favicon.rel = "icon";
+  favicon.type = "image/png";
+  favicon.href = "@/assets/logo.png"; // Chemin vers votre logo
+  document.head.appendChild(favicon);
+});
 </script>
 
 <style scoped>
@@ -84,12 +92,12 @@ const logout = () => {
 
 .bouton-nav {
   list-style: none;
-    display: flex;
-    gap: 20px;
-    margin: 0;
-    padding: 0;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
 }
 
 nav ul li a {
