@@ -1,6 +1,5 @@
 <template>
   <div class="register-page">
-    <!-- Section gauche -->
     <div class="left-section">
       <img src="@/assets/logo2.png" alt="Cuisto'Dingo Logo" class="logo" />
       <p class="left-description">
@@ -9,7 +8,6 @@
       <button class="about-button">Connexion</button>
     </div>
 
-    <!-- Section droite -->
     <div class="right-section">
       <div class="form-container">
         <h3 class="form-title">Inscription</h3>
@@ -38,26 +36,35 @@ const username = ref('');
 const email = ref('');
 const password = ref('');
 
-// Fonction pour enregistrer un utilisateur
 const registerUser = async () => {
   try {
-    const response = await api.post('/users', {
+    console.log('Requête envoyée :', {
       user: {
         username: username.value,
         email: email.value,
         password: password.value,
       },
     });
+
+    const response = await api.post('/api/users', {
+      user: {
+        username: username.value,
+        email: email.value,
+        password: password.value,
+      },
+    });
+
+    console.log('Réponse de l\'API :', response.data);
     alert('Inscription réussie ! Vous pouvez maintenant vous connecter.');
   } catch (error) {
-    console.error('Erreur lors de l\'inscription :', error);
+    console.error('Erreur lors de l\'inscription :', error.response?.data || error.message);
     alert('Erreur lors de l\'inscription. Veuillez réessayer.');
   }
 };
+
 </script>
 
 <style scoped>
-/* Page générale */
 .register-page {
   display: flex;
   height: 100vh;
@@ -65,8 +72,8 @@ const registerUser = async () => {
   background: linear-gradient(to bottom, rgb(255, 87, 34), rgb(235, 135, 59));
 }
 
-/* Section gauche */
 .left-section {
+
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -111,7 +118,6 @@ const registerUser = async () => {
   color: #ff5722;
 }
 
-/* Section droite */
 .right-section {
   flex: 1;
   display: flex;

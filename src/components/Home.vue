@@ -43,6 +43,19 @@
   </div>
 </template>
 
+<script setup>
+import { onMounted } from 'vue';
+import { useAuthStore } from '@/store/auth'; // Importez le store Pinia
+
+const authStore = useAuthStore();
+
+// Recharger les données utilisateur lors du chargement de la page d'accueil
+onMounted(() => {
+  console.log('Rechargement des données utilisateur...');
+  authStore.reload(); // Appel explicite à reload
+});
+</script>
+
 <style scoped>
 /* Section Hero */
 .hero {

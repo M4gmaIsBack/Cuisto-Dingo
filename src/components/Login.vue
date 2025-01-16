@@ -1,22 +1,21 @@
 <template>
   <div class="login-page">
-    <!-- Section gauche -->
     <div class="left-section">
       <div class="form-container">
         <h3 class="form-title">Connexion</h3>
         <form @submit.prevent="login">
           <div class="form-group">
-            <input v-model="username" type="text" placeholder="Nom d'utilisateur" required />
+            <input v-model="email" type="email" placeholder="Email" required />
           </div>
           <div class="form-group">
             <input v-model="password" type="password" placeholder="Mot de passe" required />
           </div>
           <button type="submit" class="form-button">Se connecter</button>
         </form>
+        <p v-if="error" class="error-message">{{ error }}</p>
       </div>
     </div>
 
-    <!-- Section droite -->
     <div class="right-section">
       <img src="@/assets/logo2.png" alt="Cuisto'Dingo Logo" class="logo" />
     </div>
@@ -25,28 +24,32 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useAuthStore } from '@/store/auth';  // Import du store Pinia
+import { useAuthStore } from '@/store/auth'; // Importez le store Pinia
 
-const authStore = useAuthStore();  // Utilisation du store d'authentification
-const username = ref('');
+const authStore = useAuthStore();
+const email = ref('');
 const password = ref('');
+const error = ref('');
 
 // Fonction de connexion
 const login = async () => {
   try {
-    await authStore.login(username.value, password.value);
-    if (authStore.currentUser) {
-      router.push('/');  // Redirection vers la page d'accueil si la connexion réussit
-    }
-  } catch (error) {
-    console.error('Erreur de connexion:', error);
-    alert('Échec de la connexion. Vérifiez vos identifiants.');
+    await authStore.login(email.value, password.value);
+    alert('Connexion réussie !');
+
+    // Rechargement complet de la page pour recharger l'état
+    window.location.href = '/'; // Redirige vers la page d'accueil
+  } catch (err) {
+    error.value = 'Échec de la connexion. Vérifiez vos identifiants.';
+    console.error(err);
   }
 };
 </script>
 
+
+
+
 <style scoped>
-/* Page générale */
 .login-page {
   display: flex;
   height: 100vh;
@@ -54,7 +57,6 @@ const login = async () => {
   background: linear-gradient(to bottom, rgb(255, 87, 34), rgb(235, 135, 59));
 }
 
-/* Section gauche */
 .left-section {
   flex: 1;
   display: flex;
@@ -112,7 +114,6 @@ const login = async () => {
   background: #ff5722;
 }
 
-/* Section droite */
 .right-section {
   flex: 1;
   display: flex;
@@ -122,5 +123,11 @@ const login = async () => {
 
 .logo {
   max-width: 450px;
+}
+
+.error-message {
+  margin-top: 15px;
+  color: red;
+  font-size: 0.9rem;
 }
 </style>

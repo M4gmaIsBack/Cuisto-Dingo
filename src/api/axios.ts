@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://realword-api.nouwillcode.com/api',
+  baseURL: 'https://realword-api.nouwillcode.com',
   headers: {
     'Content-Type': 'application/json',
   },
