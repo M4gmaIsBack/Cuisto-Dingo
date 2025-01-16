@@ -1,6 +1,5 @@
 <template>
   <div class="admin-page">
-    <!-- Navigation -->
     <aside class="sidebar">
       <nav>
         <ul>
@@ -10,7 +9,6 @@
       </nav>
     </aside>
 
-    <!-- Contenu principal -->
     <main class="content">
       <div v-if="currentSection === 'users'" class="section">
         <h2>Utilisateurs</h2>
@@ -63,7 +61,6 @@ const articles = ref([]);
 const newUser = ref({ username: "", email: "" });
 const newArticle = ref({ title: "", description: "", body: "", tags: "" });
 
-// Charger les utilisateurs
 const loadUsers = async () => {
   try {
     const response = await api.get("/api/users");
@@ -73,7 +70,6 @@ const loadUsers = async () => {
   }
 };
 
-// Ajouter un utilisateur
 const addUser = async () => {
   try {
     const response = await api.post("/api/users", { user: newUser.value });
@@ -84,7 +80,6 @@ const addUser = async () => {
   }
 };
 
-// Supprimer un utilisateur
 const deleteUser = async (username) => {
   try {
     await api.delete(`/api/users/${username}`);
@@ -94,7 +89,6 @@ const deleteUser = async (username) => {
   }
 };
 
-// Charger les articles
 const loadArticles = async () => {
   try {
     const response = await api.get("/api/articles");
@@ -104,7 +98,6 @@ const loadArticles = async () => {
   }
 };
 
-// Ajouter un article
 const addArticle = async () => {
   try {
     const payload = {
@@ -123,7 +116,6 @@ const addArticle = async () => {
   }
 };
 
-// Supprimer un article
 const deleteArticle = async (slug) => {
   try {
     await api.delete(`/api/articles/${slug}`);
@@ -133,12 +125,10 @@ const deleteArticle = async (slug) => {
   }
 };
 
-// Changer la section affichée
 const showSection = (section) => {
   currentSection.value = section;
 };
 
-// Charger les données au démarrage
 onMounted(() => {
   loadUsers();
   loadArticles();

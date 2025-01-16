@@ -4,12 +4,11 @@ import axios from 'axios';
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    currentUser: ref(null), // Utilisateur connecté
-    token: ref(localStorage.getItem('token') || null), // Token JWT persistant
+    currentUser: ref(null),
+    token: ref(localStorage.getItem('token') || null),
   }),
 
   actions: {
-    // Fonction pour la connexion
     async login(email: string, password: string) {
       try {
         const response = await axios.post('https://realword-api.nouwillcode.com/api/users/login', {
@@ -19,11 +18,9 @@ export const useAuthStore = defineStore('auth', {
           },
         });
 
-        // Mise à jour des données utilisateur et du token
         this.currentUser = response.data.user;
         this.token = response.data.user.token;
 
-        // Stocker les données dans le localStorage
         localStorage.setItem('token', this.token);
         localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
       } catch (error) {
@@ -32,7 +29,6 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    // Fonction pour recharger l'état utilisateur
     reload() {
       const token = localStorage.getItem('token');
       const user = localStorage.getItem('currentUser');
@@ -42,11 +38,10 @@ export const useAuthStore = defineStore('auth', {
         this.currentUser = JSON.parse(user);
         console.log('Données rechargées depuis localStorage :', this.currentUser);
       } else {
-        this.logout(); // Déconnecter si les données sont invalides
+        this.logout();
       }
     },
 
-    // Fonction pour la déconnexion
     logout() {
       this.currentUser = null;
       this.token = null;
@@ -54,7 +49,6 @@ export const useAuthStore = defineStore('auth', {
       localStorage.removeItem('currentUser');
     },
 
-    // Vérifier si l'utilisateur est connecté
     isAuthenticated() {
       return this.token !== null;
     },

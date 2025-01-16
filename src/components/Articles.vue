@@ -1,6 +1,5 @@
 <template>
   <div class="articles-page">
-    <!-- En-tête -->
     <header class="page-header">
       <h1>Nos Recettes</h1>
       <div class="search-filter">
@@ -18,7 +17,6 @@
       </div>
     </header>
 
-    <!-- Liste des articles -->
     <div class="articles-list">
       <div
         class="article-card"
@@ -57,7 +55,6 @@
       </div>
     </div>
 
-    <!-- Formulaire de création -->
     <div class="create-recipe-form">
       <h2>Créer une recette</h2>
       <form @submit.prevent="createRecipe">
@@ -86,7 +83,6 @@
       </form>
     </div>
 
-    <!-- Modale pour les détails -->
     <div v-if="selectedArticle" class="modal-overlay" @click.self="closeModal">
       <div class="modal">
         <img
@@ -103,12 +99,10 @@
             class="author-avatar"
           />
           <span class="author-name">{{ selectedArticle.author.username }}</span>
-          <!-- Bouton Suivre/Ne plus suivre pour l'auteur -->
           <button @click="toggleFollow(selectedArticle.author.username)" class="follow-button">
             {{ selectedArticle.author.following ? "Ne plus suivre" : "Suivre" }}
           </button>
 
-          <!-- Bouton Suivre/Ne plus suivre pour les commentaires -->
           <button
             v-for="comment in comments"
             @click="toggleFollow(comment.author.username)"
@@ -120,7 +114,6 @@
         </div>
         <p class="modal-description">{{ selectedArticle.body }}</p>
 
-        <!-- Commentaires -->
         <div class="comments-section">
           <h3>Commentaires</h3>
           <ul>
@@ -149,10 +142,11 @@
               placeholder="Ajouter un commentaire..."
               class="comment-input"
             ></textarea>
-            <button type="submit" class="add-comment-button">Ajouter</button>
           </form>
         </div>
         <button @click="closeModal" class="close-modal">Fermer</button>
+        <button type="submit" class="add-comment-button">Ajouter</button>
+
       </div>
     </div>
   </div>
@@ -177,7 +171,6 @@ const newRecipe = ref({
   image: "",
 });
 
-// Charger les articles
 const loadArticles = async () => {
   try {
     const response = await api.get("/api/articles");
@@ -187,7 +180,6 @@ const loadArticles = async () => {
   }
 };
 
-// Charger les tags
 const loadTags = async () => {
   try {
     const response = await api.get("/api/tags");
@@ -197,7 +189,6 @@ const loadTags = async () => {
   }
 };
 
-// Articles filtrés
 const filteredArticles = computed(() => {
   return articles.value.filter(
     (article) =>
@@ -206,7 +197,6 @@ const filteredArticles = computed(() => {
   );
 });
 
-// Ouvrir et fermer la modale
 const openModal = async (article) => {
   selectedArticle.value = article;
   loadComments(article.slug);
@@ -216,7 +206,6 @@ const closeModal = () => {
   comments.value = [];
 };
 
-// Charger les commentaires
 const loadComments = async (slug) => {
   try {
     const response = await api.get(`/api/articles/${slug}/comments`);
@@ -226,7 +215,6 @@ const loadComments = async (slug) => {
   }
 };
 
-// Ajouter un commentaire
 const addComment = async () => {
   if (!newComment.value.trim()) return;
   try {
@@ -244,7 +232,6 @@ const addComment = async () => {
   }
 };
 
-// Supprimer un commentaire
 const deleteComment = async (commentId) => {
   try {
     const token = localStorage.getItem("token");
@@ -258,7 +245,6 @@ const deleteComment = async (commentId) => {
   }
 };
 
-// Créer une recette
 const createRecipe = async () => {
   try {
     const token = localStorage.getItem("token");
@@ -282,7 +268,6 @@ const createRecipe = async () => {
   }
 };
 
-// Supprimer une recette
 const deleteRecipe = async (slug) => {
   try {
     const token = localStorage.getItem("token");
@@ -296,19 +281,16 @@ const deleteRecipe = async (slug) => {
   }
 };
 
-// Suivre/Ne plus suivre un utilisateur
-// Suivre/Ne plus suivre un utilisateur
+
 const toggleFollow = async (username) => {
   try {
     const token = localStorage.getItem("token");
     if (!token) throw new Error("Non autorisé");
 
-    // Vérifier si on est dans la modale (article sélectionné)
     let user;
     if (selectedArticle.value && selectedArticle.value.author.username === username) {
       user = selectedArticle.value.author;
     } else {
-      // Sinon, chercher dans les articles
       user = articles.value.find(
         (article) => article.author.username === username
       )?.author;
@@ -332,7 +314,6 @@ const toggleFollow = async (username) => {
 };
 
 
-// Gestion des favoris
 const toggleFavorite = async (article) => {
   try {
     const token = localStorage.getItem("token");
@@ -352,13 +333,11 @@ const toggleFavorite = async (article) => {
   }
 };
 
-// Formater la date
 const formatDate = (dateString) => {
   const options = { year: "numeric", month: "long", day: "numeric" };
   return new Date(dateString).toLocaleDateString("fr-FR", options);
 };
 
-// Charger les articles et les tags au démarrage
 onMounted(() => {
   loadArticles();
   loadTags();
@@ -406,6 +385,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 .author-avatar {
@@ -564,7 +544,6 @@ button {
   background-color: #ff5722; /* Couleur principale */
   color: white; /* Texte blanc */
   padding: 10px 20px; /* Espacement */
-  font-size: 1rem; /* Taille de la police */
   font-weight: bold; /* Texte en gras */
   border: none; /* Suppression des bordures */
   border-radius: 25px; /* Coins arrondis */
@@ -695,7 +674,10 @@ button:disabled {
   font-weight: bold;
   margin-bottom: 5px;
 }
-
+textarea {
+  width: 400px;
+  height: 100px;
+}
 .create-recipe-form .form-group input,
 .create-recipe-form .form-group textarea {
   width: 100%;

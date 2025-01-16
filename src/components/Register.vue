@@ -30,7 +30,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import api from '../api/axios'; // Assurez-vous que l'instance Axios est correctement configurée
+import api from '../api/axios';
 
 const username = ref('');
 const email = ref('');

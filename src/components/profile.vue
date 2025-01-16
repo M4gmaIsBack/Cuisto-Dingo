@@ -1,10 +1,8 @@
 <template>
   <div class="profile-page">
     <div class="profile-card">
-      <!-- Logo -->
       <img :src="userAvatar" alt="Avatar utilisateur" class="profile-avatar" />
 
-      <!-- Formulaire pour mettre à jour les informations -->
       <form @submit.prevent="updateProfile">
         <div class="form-group">
           <label for="username">Nom d'utilisateur</label>
@@ -26,7 +24,6 @@
         <button type="submit" class="save-button">Enregistrer</button>
       </form>
 
-      <!-- Bouton supprimer -->
       <button @click="deleteAccount" class="delete-button">Supprimer mon compte</button>
     </div>
   </div>
@@ -34,22 +31,19 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import api from "../api/axios"; // Instance Axios configurée
+import api from "../api/axios";
 
 const username = ref("");
 const email = ref("");
 const bio = ref("");
 const avatar = ref("");
 
-// Lien par défaut pour l'avatar
 const defaultAvatar = "@/assets/logo.png";
 
-// Computed property pour vérifier et afficher l'avatar
 const userAvatar = computed(() => {
   return avatar.value && avatar.value.trim() !== "" ? avatar.value : defaultAvatar;
 });
 
-// Chargement des données utilisateur à partir de localStorage
 const loadUserData = () => {
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   if (currentUser) {
@@ -60,10 +54,8 @@ const loadUserData = () => {
   }
 };
 
-// Charger les données utilisateur au démarrage
 loadUserData();
 
-// Méthode pour mettre à jour le profil
 const updateProfile = async () => {
   try {
     const token = localStorage.getItem("token");
@@ -91,14 +83,13 @@ const updateProfile = async () => {
     console.log("Profil mis à jour :", response.data);
     alert("Profil mis à jour avec succès !");
     localStorage.setItem("currentUser", JSON.stringify(response.data.user));
-    loadUserData(); // Recharge les données locales
+    loadUserData();
   } catch (error) {
     console.error("Erreur lors de la mise à jour du profil :", error.response?.data || error.message);
     alert("Erreur lors de la mise à jour du profil.");
   }
 };
 
-// Méthode pour supprimer le compte
 const deleteAccount = async () => {
   try {
     const token = localStorage.getItem("token");

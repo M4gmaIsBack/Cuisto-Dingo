@@ -1,12 +1,10 @@
 <template>
   <header class="header">
-    <!-- Logo et Nom -->
     <div class="logo-container">
       <img src="@/assets/logo.png" alt="Cuisto'Dingo Logo" class="logo" />
       <span class="brand-name">Cuisto'Dingo</span>
     </div>
 
-    <!-- Navigation -->
     <nav>
       <ul class="bouton-nav">
         <li><router-link to="/">Accueil</router-link></li>
@@ -14,7 +12,6 @@
         <li v-if="!isLoggedIn"><router-link to="/login">Connexion</router-link></li>
         <li v-if="!isLoggedIn"><router-link to="/register">Inscription</router-link></li>
 
-        <!-- Profil utilisateur -->
         <li v-if="isLoggedIn" class="user-menu">
           <div class="user-profile" @click="toggleProfileMenu">
             <img :src="userAvatar" alt="User Avatar" class="user-avatar" />
@@ -33,7 +30,6 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 
-// Simulez un utilisateur connecté pour le test
 const user = ref({
   name: localStorage.getItem("currentUser") ? JSON.parse(localStorage.getItem("currentUser")).username : null,
   avatar: localStorage.getItem("currentUser") ? JSON.parse(localStorage.getItem("currentUser")).image : null,
@@ -44,21 +40,18 @@ const isLoggedIn = computed(() => !!localStorage.getItem("token"));
 const userName = computed(() => user.value?.name || "Utilisateur");
 const userAvatar = computed(() => user.value?.avatar || "@/assets/logo.png");
 
-// État du menu déroulant
 const profileMenuVisible = ref(false);
 
-// Toggle du menu profil
 const toggleProfileMenu = () => {
   profileMenuVisible.value = !profileMenuVisible.value;
 };
 
-// Fonction de déconnexion
 const logout = () => {
   localStorage.removeItem("token");
   localStorage.removeItem("currentUser");
   user.value = null;
   alert("Vous êtes déconnecté.");
-  window.location.reload(); // Recharge la page pour réinitialiser l'état
+  window.location.reload();
 };
 </script>
 

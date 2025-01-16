@@ -7,7 +7,7 @@ const routes = [
   { path: '/login', component: () => import('./components/Login.vue') },
   { path: '/profile', component: () => import('./components/profile.vue') },
   { path: '/admin', component: () => import('./components/AdminPage.vue') },
-  { path: '/register', component: () => import('./components/Register.vue') }, // Route d'inscription
+  { path: '/register', component: () => import('./components/Register.vue') },
 ];
 
 const router = createRouter({

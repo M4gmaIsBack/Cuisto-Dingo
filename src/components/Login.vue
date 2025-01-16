@@ -24,21 +24,19 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useAuthStore } from '@/store/auth'; // Importez le store Pinia
+import { useAuthStore } from '@/store/auth';
 
 const authStore = useAuthStore();
 const email = ref('');
 const password = ref('');
 const error = ref('');
 
-// Fonction de connexion
 const login = async () => {
   try {
     await authStore.login(email.value, password.value);
     alert('Connexion réussie !');
 
-    // Rechargement complet de la page pour recharger l'état
-    window.location.href = '/'; // Redirige vers la page d'accueil
+    window.location.href = '/';
   } catch (err) {
     error.value = 'Échec de la connexion. Vérifiez vos identifiants.';
     console.error(err);

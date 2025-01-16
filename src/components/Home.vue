@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- Hero Section -->
     <section class="hero">
       <div class="overlay"></div>
       <div class="hero-content">
@@ -9,7 +8,6 @@
       </div>
     </section>
 
-    <!-- Deuxième Section -->
     <section class="features">
       <h2 class="features-title">POURQUOI CHOISIR CUISTO'DINGO ?</h2>
       <div class="features-grid">
@@ -30,7 +28,6 @@
       </div>
     </section>
 
-    <!-- Troisième Section -->
     <section class="cta-section">
       <div class="cta-content">
         <h2>Venez rejoindre la bande du dingo ?</h2>
@@ -45,19 +42,17 @@
 
 <script setup>
 import { onMounted } from 'vue';
-import { useAuthStore } from '@/store/auth'; // Importez le store Pinia
+import { useAuthStore } from '@/store/auth';
 
 const authStore = useAuthStore();
 
-// Recharger les données utilisateur lors du chargement de la page d'accueil
 onMounted(() => {
   console.log('Rechargement des données utilisateur...');
-  authStore.reload(); // Appel explicite à reload
+  authStore.reload();
 });
 </script>
 
 <style scoped>
-/* Section Hero */
 .hero {
   position: relative;
   height: 100vh;
